@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const Subscriber = require('../models/Subscriber');
 const routes = Router();
+const accessToken = "diOCn5@670k6";
 
 routes.get('/subs', async (req, res) => {
     try {
@@ -25,6 +26,8 @@ routes.get('/subs', async (req, res) => {
 
   routes.put('/subs/:id', async (req, res) => {
     try {
+        const {token} = req.query;
+        if(accessToken!==token) throw Error("Invalid token");
         const {id} = req.params;
         const subscriberUpdated = await Subscriber.findByIdAndUpdate(id, req.body);
         if(!subscriberUpdated) throw Error("ID doesn't exist");
@@ -36,6 +39,8 @@ routes.get('/subs', async (req, res) => {
 
   routes.delete('/subs/:id', async (req, res) => {
     try {
+        const {token} = req.query;
+        if(accessToken!==token) throw Error("Invalid token");
         const {id} = req.params;
         const subscriberDeleted = await Subscriber.findByIdAndDelete(id);
         if(!subscriberDeleted) throw Error("ID doesn't exist");
